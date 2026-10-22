@@ -1,0 +1,4 @@
+interface:
+  display_name: "ResearchBench Analysis"
+  short_description: "Run reproducible experiment analysis with the CLI"
+  default_prompt: "Use $research-analysis to validate and summarize my experiment files with ResearchBench."

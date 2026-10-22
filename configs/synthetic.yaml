@@ -1,0 +1,163 @@
+# SYNTHETIC SOFTWARE FIXTURES ONLY; not paper results.
+schema_version: '1.0'
+runs:
+- run_id: synthetic-baseline-42
+  project: synthetic-demo
+  dataset: synthetic-normal-v1
+  model: baseline
+  seed: 42
+  split: test
+  evaluation_id: synthetic-elements-v1
+  config:
+    noise_scale: 0.4
+  data_kind: synthetic
+  input:
+    path: ../examples/generated/baseline_42.csv
+    format: csv
+    mapping:
+      target: observed
+      prediction: estimated
+      weights: importance
+    expected_shape:
+    - 24
+  evaluation:
+    mode: predictions
+    missing: error
+    statistical_unit: selected scalar element
+    units: synthetic units
+- run_id: synthetic-baseline-716
+  project: synthetic-demo
+  dataset: synthetic-normal-v1
+  model: baseline
+  seed: 716
+  split: test
+  evaluation_id: synthetic-elements-v1
+  config:
+    noise_scale: 0.4
+  data_kind: synthetic
+  input:
+    path: ../examples/generated/baseline_716.json
+    format: json
+    mapping:
+      target:
+      - payload
+      - truth
+      prediction:
+      - payload
+      - forecast
+      weights:
+      - payload
+      - weights
+    expected_shape:
+    - 8
+    - 3
+  evaluation:
+    mode: predictions
+    missing: error
+    statistical_unit: selected scalar element
+    units: synthetic units
+- run_id: synthetic-baseline-2026
+  project: synthetic-demo
+  dataset: synthetic-normal-v1
+  model: baseline
+  seed: 2026
+  split: test
+  evaluation_id: synthetic-elements-v1
+  config:
+    noise_scale: 0.4
+  data_kind: synthetic
+  input:
+    path: ../examples/generated/baseline_2026.npz
+    format: npz
+    mapping:
+      target: actual
+      prediction: estimate
+      weights: importance
+    expected_shape:
+    - 8
+    - 3
+  evaluation:
+    mode: predictions
+    missing: error
+    statistical_unit: selected scalar element
+    units: synthetic units
+- run_id: synthetic-variant-42
+  project: synthetic-demo
+  dataset: synthetic-normal-v1
+  model: variant
+  seed: 42
+  split: test
+  evaluation_id: synthetic-elements-v1
+  config:
+    noise_scale: 0.25
+  data_kind: synthetic
+  input:
+    path: ../examples/generated/variant_42.csv
+    format: csv
+    mapping:
+      target: observed
+      prediction: estimated
+      weights: importance
+    expected_shape:
+    - 24
+  evaluation:
+    mode: predictions
+    missing: error
+    statistical_unit: selected scalar element
+    units: synthetic units
+- run_id: synthetic-variant-716
+  project: synthetic-demo
+  dataset: synthetic-normal-v1
+  model: variant
+  seed: 716
+  split: test
+  evaluation_id: synthetic-elements-v1
+  config:
+    noise_scale: 0.25
+  data_kind: synthetic
+  input:
+    path: ../examples/generated/variant_716.json
+    format: json
+    mapping:
+      target:
+      - payload
+      - truth
+      prediction:
+      - payload
+      - forecast
+      weights:
+      - payload
+      - weights
+    expected_shape:
+    - 8
+    - 3
+  evaluation:
+    mode: predictions
+    missing: error
+    statistical_unit: selected scalar element
+    units: synthetic units
+- run_id: synthetic-variant-2026
+  project: synthetic-demo
+  dataset: synthetic-normal-v1
+  model: variant
+  seed: 2026
+  split: test
+  evaluation_id: synthetic-elements-v1
+  config:
+    noise_scale: 0.25
+  data_kind: synthetic
+  input:
+    path: ../examples/generated/variant_2026.npz
+    format: npz
+    mapping:
+      target: actual
+      prediction: estimate
+      weights: importance
+    expected_shape:
+    - 8
+    - 3
+  evaluation:
+    mode: predictions
+    missing: error
+    statistical_unit: selected scalar element
+    units: synthetic units

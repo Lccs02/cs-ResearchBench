@@ -1,0 +1,35 @@
+name: tests
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m pytest -q
+      - run: python -m build
+      - run: python examples/generate_synthetic.py
+      - run: researchbench run configs/synthetic.yaml --output outputs/ci --baseline baseline
+      - run: researchbench validate outputs/ci/records.json --check-sources
+      - name: Install built wheel in an isolated environment
+        shell: bash
+        run: |
+          python -m venv /tmp/researchbench-wheel
+          /tmp/researchbench-wheel/bin/python -m pip install dist/*.whl
+          cd /tmp
+          /tmp/researchbench-wheel/bin/python -m researchbench --version
+          /tmp/researchbench-wheel/bin/python -m researchbench run "$GITHUB_WORKSPACE/configs/synthetic.yaml" --output /tmp/researchbench-wheel-report --baseline baseline
+          /tmp/researchbench-wheel/bin/python -m researchbench validate /tmp/researchbench-wheel-report/records.json --check-sources
+      - uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-report-python-${{ matrix.python-version }}
+          path: outputs/ci/

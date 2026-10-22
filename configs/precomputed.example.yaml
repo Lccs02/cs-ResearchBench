@@ -1,0 +1,22 @@
+# FORMAT EXAMPLE ONLY. No real RL data or project layout is asserted.
+schema_version: '1.0'
+runs:
+  - run_id: Unverified-example-42
+    project: Unverified
+    dataset: Unverified
+    model: Unverified
+    seed: 42
+    split: evaluation
+    evaluation_id: Unverified
+    config: {}
+    data_kind: unknown
+    input:
+      path: ./YOUR_LOCAL_FILE.json
+      format: json
+      mapping:
+        episode_return: [YOUR_CONFIRMED_ROOT_KEY, YOUR_CONFIRMED_METRIC_KEY]
+    evaluation:
+      mode: precomputed
+      statistical_unit: 'Unverified: specify how the per-training-seed scalar was computed'
+      units: {episode_return: reward}
+      directions: {episode_return: max}
