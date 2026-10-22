@@ -139,4 +139,4 @@ s_m=\sqrt{\frac{1}{S-1}\sum_{s=1}^{S}(m_s-\bar m)^2}.$$
 
 ## 当前验收状态
 
-本地 Python 3.12 测试 **44 项通过**；干净环境安装、wheel 脱离源码目录运行、完整示例及 LaTeX 实际编译均通过。远端 CI 和 Python 3.10 执行状态为 **Unverified**，详细命令与证据范围见 [docs/verification.md](docs/verification.md)。
+本地 Python 3.12 测试 **44 项通过**；干净环境安装、wheel 脱离源码目录运行、完整示例及 LaTeX 实际编译均通过。[GitHub Actions 验收运行](https://github.com/Lccs02/cs-ResearchBench/actions/runs/39821936090)中，Python 3.10 和 3.12 均 **44 项通过**，包括完整示例和独立 wheel 安装。详细命令与证据范围见 [docs/verification.md](docs/verification.md)。原始实验的科学真实性仍为 **Unverified**。

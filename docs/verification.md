@@ -15,8 +15,10 @@
 | 独立 venv 安装 wheel，从 `/tmp` 运行完整示例及来源校验 | 成功，导入来自 site-packages |
 | `pdflatex -interaction=nonstopmode -halt-on-error ...` | summary.tex 编译成功，1 页，无 overfull 警告 |
 | Skill 格式校验与独立 CLI 使用 | 成功，无重复指标实现 |
-| GitHub Actions 远端执行 | **Unverified：发布提交后的运行状态待核查** |
-| Python 3.10 本地执行 | **Unverified：仅配置在 CI 矩阵中，未在本地运行** |
+| GitHub Actions / Python 3.10 | **44 passed in 4.05s**；安装、构建、完整示例、来源校验、独立 wheel 执行均成功 |
+| GitHub Actions / Python 3.12 | **44 passed in 5.51s**；安装、构建、完整示例、来源校验、独立 wheel 执行均成功 |
+
+远端证据：[Actions run 39821936090](https://github.com/Lccs02/cs-ResearchBench/actions/runs/39821936090)，被测源码提交 `d17bd02ae577f3238bfa5e431de63376c1a4c71e`。后续验收文档更新仅记录该结果，不改变源码；不将软件验收等同于实验真实性验证。
 
 ## 单元与端到端测试覆盖
 
