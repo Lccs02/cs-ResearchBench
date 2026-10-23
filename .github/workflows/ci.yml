@@ -20,6 +20,9 @@ jobs:
       - run: python examples/generate_synthetic.py
       - run: researchbench run configs/synthetic.yaml --output outputs/ci --baseline baseline
       - run: researchbench validate outputs/ci/records.json --check-sources
+      - run: python examples/generate_pacsr_synthetic.py
+      - run: researchbench pacsr-inspect examples/generated/pacsr/synthetic-17.npz --format npz --output outputs/pacsr-inspection.json
+      - run: researchbench pacsr-run examples/generated/pacsr/audit.yaml --output outputs/pacsr-ci
       - name: Install built wheel in an isolated environment
         shell: bash
         run: |
@@ -29,7 +32,11 @@ jobs:
           /tmp/researchbench-wheel/bin/python -m researchbench --version
           /tmp/researchbench-wheel/bin/python -m researchbench run "$GITHUB_WORKSPACE/configs/synthetic.yaml" --output /tmp/researchbench-wheel-report --baseline baseline
           /tmp/researchbench-wheel/bin/python -m researchbench validate /tmp/researchbench-wheel-report/records.json --check-sources
+          /tmp/researchbench-wheel/bin/python -m researchbench pacsr-run "$GITHUB_WORKSPACE/examples/generated/pacsr/audit.yaml" --output /tmp/researchbench-pacsr-wheel-report
       - uses: actions/upload-artifact@v4
         with:
           name: synthetic-report-python-${{ matrix.python-version }}
-          path: outputs/ci/
+          path: |
+            outputs/ci/
+            outputs/pacsr-ci/
+            outputs/pacsr-inspection.json

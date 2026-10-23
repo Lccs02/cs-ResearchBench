@@ -20,8 +20,7 @@ class UnconfiguredProjectAdapter:
         )
 
 
-class PACSRAdapter(UnconfiguredProjectAdapter):
-    project_name = "PACSR"
+from researchbench.adapters.pacsr import PACSRAdapter  # noqa: E402,F401
 
 
 class SatelliteMultiServiceAdapter(UnconfiguredProjectAdapter):
