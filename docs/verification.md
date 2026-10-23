@@ -45,3 +45,26 @@ python -m build
 ```
 
 再次运行请选择新的输出目录。精确复刻依赖可先安装 requirements-tested.txt；浮点末位和图像字节跨平台不保证完全一致。
+
+## Phase 2 local verification (2026-10-23)
+
+Branch: `phase2/pacsr-audit`. Existing 44 tests retained without edits.
+
+- `python -m pytest -q`: **75 passed, 1 skipped**. The skip is exclusively
+  `test_real_pacsr_golden_reference`: a matching real cache/reference was not supplied.
+- Original README synthetic workflow: 6 runs, source checks passed.
+- `python examples/generate_pacsr_synthetic.py` followed by `pacsr-inspect` and
+  `pacsr-run`: 2 synthetic seeds, 72 per-run horizon/metric comparisons passed
+  with predeclared `atol=rtol=1e-10`. This is software validation only.
+- `python -m build`: isolated sdist/wheel build passed. The initial local
+  `--no-isolation` attempt lacked setuptools; the normal isolated build resolved
+  its declared build dependencies without changing runtime dependencies.
+- Fresh `/tmp` virtual environment: installed built wheel and dependencies,
+  ran both original and PACSR CLI workflows from outside the source directory.
+- `summary.tex` compiled successfully using pdfLaTeX and booktabs.
+- CSV, JSON provenance, SVG/PDF, artifact hashes and read-only cache behavior
+  covered by integration tests. Source mutation aborts atomic export.
+
+The original evaluator/source inspection is not a Golden numerical reproduction.
+No original private source, real cache, weight or private report is committed.
+Real dataset/model/seed acceptance and scientific provenance remain **Unverified**.

@@ -131,12 +131,46 @@ s_m=\sqrt{\frac{1}{S-1}\sum_{s=1}^{S}(m_s-\bar m)^2}.$$
 
 ## 扩展与限制
 
-`adapters/base.py` 定义 Protocol，并提供 `PACSRAdapter`、`SatelliteMultiServiceAdapter`、`WorldModelRLAdapter` 的占位接口；调用会清晰报错，真实格式均为 **Unverified**。获取真实且可授权使用的样例后，实现 `read(...) -> ExperimentRecord`，复用 `metrics` 并保存全部来源。可通过 Python 的 `ingest_config(path, adapter=...)` 注入。MVP CLI 使用通用文件 Adapter。
+`adapters/base.py` 定义 Protocol，卫星预测和 World Model RL 保留占位接口。Phase 2 的 `PACSRAdapter.evaluate` 返回多个时域/分量结果，使用独立 `pacsr-audit/1.0` 审计契约和 `pacsr-run` CLI；不改变通用 Schema 1.0 或 MAE/RMSE。真实实验适用性仍为 **Unverified**。
 
 `.agents/skills/research-analysis/SKILL.md` 只负责选择、配置和调用 CLI，不含指标实现。该 Skill 随仓库提供，不要求安装 AI 才能运行框架。
 
 不包含训练、实验调度、数据库、Dashboard、自动选模、显著性检验或假定真实项目格式。无私有数据和大型权重；生成文件默认被 `.gitignore` 排除。GitHub Actions 在 Python 3.10/3.12 上安装、测试、构建 wheel 并运行完整示例。
 
-## 当前验收状态
+## Phase 1 验收记录
 
 本地 Python 3.12 测试 **44 项通过**；干净环境安装、wheel 脱离源码目录运行、完整示例及 LaTeX 实际编译均通过。[GitHub Actions 验收运行](https://github.com/Lccs02/cs-ResearchBench/actions/runs/39821936090)中，Python 3.10 和 3.12 均 **44 项通过**，包括完整示例和独立 wheel 安装。详细命令与证据范围见 [docs/verification.md](docs/verification.md)。原始实验的科学真实性仍为 **Unverified**。
+
+
+## Phase 2：PACSR 缓存复核
+
+接口设计见 [docs/phase2-design.md](docs/phase2-design.md)，完整配置与统计口径见
+[docs/pacsr-audit.md](docs/pacsr-audit.md)。以下流程只使用合成测试数据：
+
+```bash
+python examples/generate_pacsr_synthetic.py
+researchbench pacsr-inspect examples/generated/pacsr/synthetic-17.npz --format npz --output outputs/pacsr-inspection.json
+researchbench pacsr-run examples/generated/pacsr/audit.yaml --output outputs/pacsr-demo
+python -m pytest -q
+```
+
+生成 `metrics.csv`、`summary.csv`、`comparison.csv`、`summary.tex`、SVG/PDF、
+`audit.json` 和 `manifest.json`。数值不匹配仍输出报告，退出码为 3；配置/来源错误为 2。
+生成器和导出目录均不得已存在，重复执行请指定新目录。
+
+**真实缓存验收尚未完成，状态 Unverified。** 已检查相关评估源码，但可访问的 NPZ
+缺少 PACSR 配对目标和 mask，不能用于复现论文。软件测试通过不代表真实数据复现。
+需要真实缓存、对应原始评估结果、完整源码依赖、模型配置、归一化和完整测试范围证据；
+这些文件留在本机，不提交到仓库。配置中的 SHA-256、轴和口径必须由实际检查填写。
+
+具备上述证据后，执行本地真实数据验收（不上传缓存）：
+
+```bash
+researchbench pacsr-inspect /local/private/forecasts.npz --format npz --output outputs/real-inspection.json
+researchbench pacsr-run /local/private/audit.yaml --output outputs/real-audit
+RESEARCHBENCH_PACSR_REAL_CONFIG=/local/private/audit.yaml python -m pytest -q tests/test_pacsr_real.py
+```
+
+本地测试结果：**75 passed, 1 skipped**；原有 44 项全部保留通过。
+跳过的是缺少真实缓存的验收测试。干净虚拟环境安装 wheel 并运行两阶段 CLI 示例通过，
+LaTeX 表格实际编译通过。CI 仅生成固定随机种子的合成数据。
